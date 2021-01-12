@@ -242,12 +242,12 @@ bool create(struct record *target, char *str)
   }
   sum = 256 - sum;
   sum %= 256;
-  // if (sum != checksum_int)
-  // {
-  //   printf("Error: Invalid checksum\n");
-  //   printf("Expected: %d, but got %d\n", sum, checksum_int);
-  //   return false;
-  // }
+  if (sum != checksum_int)
+  {
+    printf("Error: Invalid checksum\n");
+    printf("Expected: %d, but got %d\n", sum, checksum_int);
+    return false;
+  }
   target->checksum = checksum_int;
   return true;
 }
