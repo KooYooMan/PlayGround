@@ -5,7 +5,7 @@
 const int max_buff = 65536;
 const int limit_process = 25;
 const int limit_record = 530; // 512 data + 11 others = 523 charaters
-const int bytes_per_line = 16;
+const int bytes_per_line = 17;
 
 /* 
   Clear the command, terminal Function
