@@ -232,14 +232,16 @@ bool create(struct record *target, char *str)
     return false;
   }
   // check checksum of the record
-  int sum = len_data_int + operation_int + memory_int;
+  int sum = len_data_int + operation_int + memory_int / 256 + memory_int % 256;
   sum %= 256;
   for (int i = 0; i < len_data_int; ++i)
   {
     int x = convert_decimal(target->list_data[i]);
+    printf("%d ", x);
     sum += x;
     sum %= 256;
   }
+  printf("\n");
   sum = 256 - sum;
   sum %= 256;
   if (sum != checksum_int)
@@ -394,7 +396,7 @@ void main_process(char *file_name)
     return;
   }
 
-  process_buffer(fp, file_name, buffer);
+  if(process_buffer(fp, file_name, buffer) == false) return;
 
   bool working = true;
   int index = 0;
