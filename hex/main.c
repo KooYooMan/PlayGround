@@ -5,7 +5,7 @@
 const int max_buff = 65536;
 const int limit_process = 25;
 const int limit_record = 530; // 512 data + 11 others = 523 charaters
-const int bytes_per_line = 17;
+const int bytes_per_line = 16;
 
 /* 
   Clear the command, terminal Function
@@ -350,7 +350,7 @@ bool process_buffer(FILE *fp, char *file_name, char **buffer)
 void batch_print(char** buffer, bool& working, int& index) {
   for (int i = 0; i < limit_process; ++ i) {
     printf("%s\t", convert_heximal(index));
-    char* ascii = (char*)calloc(bytes_per_line, sizeof(char));
+    char* ascii = (char*)calloc(bytes_per_line + 1, sizeof(char));
     for (int j = 0; j < bytes_per_line; ++ j) {
       printf("%s ", (strcmp(buffer[index], "0") == 0 ? "FF" : buffer[index]));
       int x = convert_decimal(buffer[index]);
