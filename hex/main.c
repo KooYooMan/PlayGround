@@ -237,7 +237,6 @@ bool create(struct record *target, char *str)
   for (int i = 0; i < len_data_int; ++i)
   {
     int x = convert_decimal(target->list_data[i]);
-    printf("%d ", x);
     sum += x;
     sum %= 256;
   }
