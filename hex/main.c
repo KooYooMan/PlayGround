@@ -348,19 +348,27 @@ bool process_buffer(FILE *fp, char *file_name, char **buffer)
 /*
   Print Batch Iteratively (25 lines)
 */
-void batch_print(char** buffer, bool& working, int& index) {
+void batch_print(char** buffer, bool& working, int& index, int& len_buffer) {
   for (int i = 0; i < limit_process; ++ i) {
     printf("%s\t", convert_heximal(index));
     char* ascii = (char*)calloc(bytes_per_line + 1, sizeof(char));
-    for (int j = 0; j < bytes_per_line; ++ j) {
+
+    int j;
+    for (j = 0; j < bytes_per_line; ++ j) {
+      if (index >= len_buffer) break;
       printf("%s ", (strcmp(buffer[index], "0") == 0 ? "FF" : buffer[index]));
       int x = convert_decimal(buffer[index]);
       if (strcmp(buffer[index], "0") == 0) ascii[j] = ' ';
       else ascii[j] = (x < 32 ? '.' : char(x));
       index ++;
-      if (index >= max_buff) return;
+      if (index >= len_buffer) break;
+    }
+
+    for (;j < bytes_per_line; ++ j) {
+      printf("   ");
     }
     printf("\t%s\n", ascii);
+    if (index >= len_buffer) break;
   }
 }
 
@@ -397,14 +405,21 @@ void main_process(char *file_name)
 
   if(process_buffer(fp, file_name, buffer) == false) return;
 
+  int len_buffer = max_buff;
+
+  for (int i = max_buff - 1; i >= 0; -- i) {
+    if (strcmp(buffer[i], "0") != 0) break;
+    len_buffer = i;
+  }
+
   bool working = true;
   int index = 0;
   do
   {
     // print the data
     clear_screen();
-    batch_print(buffer, working, index);
-    if (index >= max_buff) {
+    batch_print(buffer, working, index, len_buffer);
+    if (index >= len_buffer) {
       return ;
     }
     // continue command
